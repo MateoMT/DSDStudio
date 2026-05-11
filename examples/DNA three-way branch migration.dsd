@@ -1,0 +1,8 @@
+directive simulation {initial=0; final=50000;}
+directive simulator deterministic
+def N1 = 1.0
+def N2 = 1.0
+def Input1() = <a^> [b^ c]
+def Input2() = {a^* b^* c*}
+( N1 * Input1()
+| N2 * Input2())

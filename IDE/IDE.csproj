@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>False</UseWindowsForms>
+    <ApplicationIcon>favicon [256x256].ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Icons\close.png" />
+    <None Remove="Resources\Icons\logo.png" />
+    <None Remove="Resources\Icons\maxsize.png" />
+    <None Remove="Resources\Icons\minsize.png" />
+    <None Remove="Resources\Icons\new.png" />
+    <None Remove="Resources\Icons\open.png" />
+    <None Remove="Resources\Icons\restore.png" />
+    <None Remove="Themes\dsd.xshd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Themes\DarkMenu.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="favicon [256x256].ico" />
+    <EmbeddedResource Include="Themes\dsd.xshd">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\LXGW.ttf" />
+    <Resource Include="Resources\Icons\close.png" />
+    <Resource Include="Resources\Icons\logo.png" />
+    <Resource Include="Resources\Icons\maxsize.png" />
+    <Resource Include="Resources\Icons\minsize.png" />
+    <Resource Include="Resources\Icons\new.png" />
+    <Resource Include="Resources\Icons\open.png" />
+    <Resource Include="Resources\Icons\restore.png" />
+    <Resource Include="Themes\DarkMenu.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
+    <PackageReference Include="OxyPlot.SkiaSharp.Wpf" Version="2.2.0" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+    <PackageReference Include="SharpVectors" Version="1.8.4.2" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
+    <PackageReference Include="SkiaSharp.Views.WPF" Version="3.119.0" />
+    <PackageReference Include="unvell.ReoGridWPF.dll" Version="3.2.0" />
+    <PackageReference Include="WpfMath" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lexer\DSDCore.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,181 @@
+﻿<Window x:Class="IDE.Views.Results"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IDE.Views" 
+        xmlns:converters="clr-namespace:IDE.Converters"
+        xmlns:viewmodels="clr-namespace:IDE.ViewModels"
+        xmlns:svg="http://sharpvectors.codeplex.com/runtime/"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:wpfmath="clr-namespace:WpfMath.Controls;assembly=WpfMath"
+        xmlns:rg="clr-namespace:unvell.ReoGrid;assembly=unvell.ReoGrid"
+        xmlns:oxysharp="http://oxyplot.org/skiawpf"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:data="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+        mc:Ignorable="d"
+        Background="#ffffff"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        x:Name="ResultsWindow"
+        Title="Results" Height="700" Width="1200">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/DarkMenu.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:WindowStateToIconConverter x:Key="WindowStateToIconConverter" />
+            <converters:ObjectTypeToVisibilityConverter x:Key="ObjectTypeToVisibilityConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <data:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+            <DataTemplate DataType="{x:Type viewmodels:ReactivePageViewModel}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,10,10,5">
+                        <RadioButton x:Name="SingleViewRadio" Content="Single View" 
+                                     IsChecked="{Binding IsAllViewMode, Converter={StaticResource InverseBooleanConverter}}" 
+                                     GroupName="ViewMode" Margin="0,0,10,0"/>
+                        <RadioButton x:Name="AllViewRadio" Content="All Views" 
+                                     IsChecked="{Binding IsAllViewMode}" 
+                                     GroupName="ViewMode" Margin="0,0,10,0"/>
+                    </StackPanel>
+
+                    <ComboBox Grid.Row="1" Margin="10,5" 
+                              ItemsSource="{Binding SvgItems}" 
+                              SelectedItem="{Binding SelectedSvg}"
+                              Visibility="{Binding ElementName=SingleViewRadio, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Index, StringFormat='Reactive {0}'}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                  Visibility="{Binding ElementName=SingleViewRadio, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <svgc:SvgViewbox SvgSource="{Binding SelectedSvg.SvgContent}" Margin="10"/>
+                    </ScrollViewer>
+
+                    <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                  Visibility="{Binding ElementName=AllViewRadio, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ItemsControl ItemsSource="{Binding SvgItems}" Margin="10">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,10">
+                                        <TextBlock Text="{Binding Index, StringFormat='Reactive {0}'}" 
+                                                   FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <svgc:SvgViewbox SvgSource="{Binding SvgContent}" 
+                                                     MaxWidth="{Binding ContentMaxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                     Stretch="Uniform"
+                                                     StretchDirection="Both"
+                                                     HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:ODEPageViewModel}">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <wpfmath:FormulaControl Formula="{Binding LaTeXContent}" Margin="20" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Background="Transparent" Foreground="#333"/>
+                </ScrollViewer>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:TablePageViewModel}">
+
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:ChartPageViewModel}">
+                <Grid Margin="10">
+                    <oxysharp:PlotView x:Name="PlotView"
+            Model="{Binding PlotModel}"
+            Margin="5">
+                    </oxysharp:PlotView>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <DockPanel>
+        <Border Background="#FF3B3B3B" Height="30" DockPanel.Dock="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left" Height="30">
+                    <Image Source="/Resources/Icons/logo.png" />
+                    <TextBlock Text="DSDStudio  " Foreground="White" VerticalAlignment="Center" FontSize="12" Margin="10,0,0,0"/>
+                    <Menu Background="#FF3B3B3B" Foreground="White" VerticalAlignment="Center"  Grid.IsSharedSizeScope="True" BorderBrush="#FF3B3B3B">
+                        <MenuItem Header="Save to File" Command="{Binding SaveToFileCommand}"/>
+                    </Menu>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <Button Cursor="Hand" Height="30"  Background="Transparent" BorderBrush="Transparent" Command="{Binding MinimizeCommand}">
+                        <Image Source="/Resources/Icons/minsize.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button  Cursor="Hand" Height="30" Background="Transparent" BorderBrush="Transparent" Command="{Binding ToggleMaximizeCommand}">
+                        <Image Name="MaxsizeImg" Source="{Binding WindowState, Converter={StaticResource WindowStateToIconConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Cursor="Hand" Height="30" Background="Transparent" BorderBrush="Transparent" Command="{Binding CloseCommand}">
+                        <Image Source="/Resources/Icons/close.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <ContentControl Content="{Binding CurrentPage}">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentPage, Converter={StaticResource ObjectTypeToVisibilityConverter}, ConverterParameter={x:Type viewmodels:TablePageViewModel}}" Value="{x:Static Visibility.Visible}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+
+                <Border BorderBrush="#444444" BorderThickness="1" Margin="10">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentPage, Converter={StaticResource ObjectTypeToVisibilityConverter}, ConverterParameter={x:Type viewmodels:TablePageViewModel}}" Value="{x:Static Visibility.Visible}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <rg:ReoGridControl x:Name="Grids" 
+                                       Background="#ffff" 
+                                       SheetTabNewButtonVisible="False"
+                                       SheetTabVisible="False">
+                    </rg:ReoGridControl>
+                </Border>
+            </Grid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#ffffff">
+                <Button Content="Reactive" Command="{Binding ShowReactivePageCommand}" Margin="10,0" Padding="10,5" Background="#ffffff" Foreground="#333" BorderBrush="#444"/>
+                <Button Content="ODE" Command="{Binding ShowODEPageCommand}" Margin="10,0" Padding="10,5" Background="#ffffff" Foreground="#333" BorderBrush="#444"/>
+                <Button Content="Table" Command="{Binding ShowTablePageCommand}" Margin="10,0" Padding="10,5" Background="#ffffff" Foreground="#333" BorderBrush="#444"/>
+                <Button Content="Concentration Chart" Command="{Binding ShowChartPageCommand}" Margin="10,0" Padding="10,5" Background="#ffffff" Foreground="#333" BorderBrush="#444"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>

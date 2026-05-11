@@ -1,0 +1,119 @@
+﻿<Window x:Class="IDE.Views.IDEMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IDE.Views" xmlns:local1="clr-namespace:IDE.ViewModels" xmlns:local2="clr-namespace:IDE.Services" d:DataContext="{d:DesignInstance Type=local1:IDEMainViewModel}"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:converters="clr-namespace:IDE.Converters"
+        mc:Ignorable="d"
+        Background="#1E1F22"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Title="IDE Main" Height="720" Width="1280">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/DarkMenu.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:WindowStateToIconConverter x:Key="WindowStateToIconConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding 
+            Key="S" 
+            Modifiers="Control" 
+            Command="{Binding SaveCommand}" 
+        />
+        <KeyBinding 
+            Key="O" 
+            Modifiers="Control" 
+            Command="{Binding OpenCommand}"/>
+        <KeyBinding 
+            Key="N" 
+            Modifiers="Control" 
+            Command="{Binding NewFileCommand}"/>
+        <KeyBinding
+            Key="F4" 
+            Modifiers="Alt" 
+            Command="{Binding ExitCommand}"/>
+        
+    </Window.InputBindings>
+    <DockPanel >
+        <Border Background="#FF3B3B3B" Height="30" DockPanel.Dock="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" >
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left" Height="30">
+                    <Image Source="/Resources/Icons/logo.png" />
+                    <TextBlock Text="DSDStudio   " Foreground="White" VerticalAlignment="Center" FontSize="12" Margin="10,0,0,0"/>
+                    <Menu Background="#FF3B3B3B" Foreground="White" VerticalAlignment="Center"  Grid.IsSharedSizeScope="True" BorderBrush="#FF3B3B3B">
+                        <MenuItem Header="File"  >
+                            <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding NewFileCommand}"/>
+                            <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}"/>
+                            <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}"/>
+                            <Separator/>
+                            <MenuItem Header="Exit" InputGestureText="Alt+F4" Command="{Binding ExitCommand}"/>
+                        </MenuItem>
+                        <MenuItem Header="Edit" >
+                            <MenuItem Header="Word Wrap" IsCheckable="True" IsChecked="{Binding IsWordWrapEnabled}"/>
+                            <Separator/>
+                            <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding CutCommand}"/>
+                            <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding CopyCommand}"/>
+                            <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding PasteCommand}"/>
+                        </MenuItem>
+                        <MenuItem Header="Compile" InputGestureText="F9" Command="{Binding CompileCommand}"/>
+                        <MenuItem Header="Simulate" InputGestureText="F9" Command="{Binding SimulateCommand}"/>
+                        <MenuItem Header="Help" >
+                            <MenuItem Header="About"  Command="{Binding ShowAboutCommand}"/>
+                        </MenuItem>
+                    </Menu> 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <Button Cursor="Hand" Height="30"  Background="Transparent" BorderBrush="Transparent" Command="{Binding MinimizeCommand}">
+                        <Image Source="/Resources/Icons/minsize.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button  Cursor="Hand" Height="30" Background="Transparent" BorderBrush="Transparent" Command="{Binding ToggleMaximizeCommand}">
+                        <Image Name="MaxsizeImg" Source="{Binding WindowState1, Converter={StaticResource WindowStateToIconConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Cursor="Hand" Height="30" Background="Transparent" BorderBrush="Transparent" Command="{Binding CloseCommand}">
+                        <Image Source="/Resources/Icons/close.png" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="8.75*"></RowDefinition>
+                <RowDefinition Height="0.25*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="8*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <avalonEdit:TextEditor x:Name="textEditor" SyntaxHighlighting="DSD" ShowLineNumbers="True" FontFamily="Consolas" Background="#1E1F22"  Foreground="White"
+                        PreviewMouseWheel="TextEditor_MouseWheel" WordWrap="{Binding IsWordWrapEnabled}" FontSize ="{Binding FontSize}" Document="{Binding Document}" TextChanged="TextEditor_TextChanged">
+                        <avalonEdit:TextEditor.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Copy" Command="{Binding CopyCommand}" />
+                                <MenuItem Header="Paste" Command="{Binding PasteCommand}" />
+                                <MenuItem Header="Cut" Command="{Binding CutCommand}" />
+                            </ContextMenu>
+                        </avalonEdit:TextEditor.ContextMenu>
+                    </avalonEdit:TextEditor>
+                    <GridSplitter Height="1" Background="#FF8B8B8B"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"></GridSplitter>
+                    <DockPanel Grid.Row="1">
+
+                        <Border Height="30" Background="Transparent" BorderBrush="#FF8B8B8B" BorderThickness="1" DockPanel.Dock="Top">
+                            <TextBlock Grid.Row="0" Text="  Output" FontSize="14" Foreground="Gray"/>
+                        </Border>
+
+                        <TextBox x:Name="outputTextBox" Background="#1E1F22" Foreground="White" IsReadOnly="True" Text="{Binding OutputMessage}" TextAlignment="Left" BorderBrush="Transparent" DockPanel.Dock="Top" TextChanged="outputTextBox_TextChanged"></TextBox>
+                    </DockPanel>
+                </Grid>
+            <StatusBar Name="statusBar" Grid.Row="1" Background="#FF3B3B3B" Foreground="Wheat">
+                <TextBlock Text="{Binding StatusMessage}" />
+            </StatusBar>
+        </Grid>
+
+
+    </DockPanel>
+</Window>

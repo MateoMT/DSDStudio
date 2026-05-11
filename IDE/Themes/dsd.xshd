@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name="DSD" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="#6A9955" exampleText="// 这是一个注释" />
+  <Color name="Keyword" foreground="#569CD6" fontWeight="bold" exampleText="directive simulation" />
+  <Color name="Directive" foreground="#C586C0" fontWeight="bold" exampleText="directive parameters" />
+  <Color name="Operator" foreground="#D4D4D4" exampleText="^ * | + -" />
+  <Color name="String" foreground="#CE9178" exampleText="&quot;red&quot;" />
+  <Color name="Number" foreground="#B5CEA8" exampleText="10.5" />
+  <Color name="Identifier" foreground="#9CDCFE" exampleText="Input1" />
+  <Color name="DomainDefinition" foreground="#4EC9B0" fontWeight="bold" exampleText="dom tb" />
+  <Color name="DomainProperty" foreground="#9CDCFE" exampleText="bind=k" />
+  <Color name="StrandOperator" foreground="#DCDCAA" exampleText="&lt; &gt; [ ] { }" />
+  <Color name="Brackets" foreground="#FFD700" exampleText="( )" />
+  <Color name="Units" foreground="#D69D85" exampleText="nM" />
+  <Color name="Toehold" foreground="#FF8C00" exampleText="^" />
+  
+  <RuleSet>
+    <!-- 注释 -->
+    <Span color="Comment" begin="//" />
+    <Span color="Comment" multiline="true" begin="\(\*" end="\*\)" />
+    
+    <!-- 字符串 -->
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+    
+    <!-- 关键词 -->
+    <Keywords color="Keyword">
+      <Word>def</Word>
+      <Word>dom</Word>
+      <Word>new</Word>
+      <Word>true</Word>
+      <Word>false</Word>
+      <Word>sum</Word>
+    </Keywords>
+    
+    <!-- 指令关键词 -->
+    <Keywords color="Directive">
+      <Word>directive</Word>
+      <Word>simulation</Word>
+      <Word>parameters</Word>
+      <Word>compilation</Word>
+      <Word>infinite</Word>
+      <Word>stochastic</Word>
+      <Word>deterministic</Word>
+      <Word>simulator</Word>
+      <Word>plots</Word>
+      <Word>final</Word>
+      <Word>initial</Word>
+      <Word>points</Word>
+      <Word>scale</Word>
+      <Word>trajectories</Word>
+      <Word>rendering</Word>
+      <Word>mode</Word>
+      <Word>nucleotides</Word>
+    </Keywords>
+    
+    <!-- 特性关键词 -->
+    <Keywords color="DomainProperty">
+      <Word>bind</Word>
+      <Word>unbind</Word>
+      <Word>colour</Word>
+      <Word>color</Word>
+      <Word>seq</Word>
+    </Keywords>
+    
+    <!-- 单位 -->
+    <Keywords color="Units">
+      <Word>h</Word>
+      <Word>min</Word>
+      <Word>s</Word>
+      <Word>ms</Word>
+      <Word>us</Word>
+      <Word>ns</Word>
+      <Word>m</Word>
+      <Word>mm</Word>
+      <Word>um</Word>
+      <Word>nm</Word>
+      <Word>pm</Word>
+      <Word>fm</Word>
+      <Word>M</Word>
+      <Word>mM</Word>
+      <Word>uM</Word>
+      <Word>nM</Word>
+      <Word>pM</Word>
+      <Word>fM</Word>
+      <Word>aM</Word>
+      <Word>zM</Word>
+      <Word>yM</Word>
+    </Keywords>
+    
+    <!-- DNA链操作符 -->
+    <Rule color="StrandOperator">\&lt;|\&gt;|\[|\]|\{|\}</Rule>
+    
+    <!-- Toehold符号 -->
+    <Rule color="Toehold">\^</Rule>
+    
+    <!-- 括号 -->
+    <Rule color="Brackets">\(|\)</Rule>
+    
+    <!-- 操作符 -->
+    <Rule color="Operator">\*|;|:|::|,|\+|-|=|@|%|_|\||/</Rule>
+    
+    <!-- 数字格式 -->
+    <Rule color="Number">\b0[xX][0-9a-fA-F]+|\b\d+(\.\d+)?([eE][+-]?\d+)?|\b\.\d+([eE][+-]?\d+)?</Rule>
+    
+    <!-- 域定义标识 -->
+    <Rule color="DomainDefinition">\bdom\s+[a-zA-Z_][a-zA-Z0-9_']*</Rule>
+    
+    <!-- 一般标识符 -->
+    <Rule color="Identifier">\b[a-zA-Z_][a-zA-Z0-9_']*\b</Rule>
+  </RuleSet>
+</SyntaxDefinition>
