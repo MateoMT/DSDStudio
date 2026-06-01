@@ -6,6 +6,11 @@ DSDStudio is a Windows desktop IDE and simulation workbench for DNA strand displ
 - [Example models](examples/)
 - [Benchmark project](Benchmark/)
 
+## Publication
+Our paper “DSDStudio: A GPU-Accelerated General-Purpose DSD Simulation Software” has been accepted for publication in Frontiers of Computer Science (FCS) special column “Code & Data”.
+
+Citation: Tongmao Ma, Beining Qi, Alfonso Rodríguez-Patón, Yijun Xiao, Tao Song. DSDStudio: A GPU-Accelerated General-Purpose DSD Simulation Software. Front. Comput. Sci., 2026. DOI: 10.1007/s11704-026-60800-w
+
 ## Reviewer Quick Verification
 
 For reviewers who only need to verify the submitted software, a pre-built Windows package is provided together with the source code. The package can be used without opening Visual Studio.
